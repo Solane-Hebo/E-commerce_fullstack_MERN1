@@ -21,8 +21,8 @@ const productsSchema = new mongoose.Schema({
         required: [true, "product description is required"],
         trim: true
     },
-    image: {
-        type: String,
+    images: {
+        type: [String],
         required: [true, "product image is required"],
         trim: true
     },
@@ -31,18 +31,7 @@ const productsSchema = new mongoose.Schema({
         required: [true, "product category is required"],
         trim: true
     },
-    countInStock: {
-        type: Number,
-        required: [true, "product countInstock is required"],
-    },
-    rating: {
-        type: Number,
-        required: [true, "product rating is required"],
-    },
-    numReviews: {
-        type: Number,
-        required: [true, "product numReviews is required"],
-    }
+   
 
 }, {timestamps: true})
 

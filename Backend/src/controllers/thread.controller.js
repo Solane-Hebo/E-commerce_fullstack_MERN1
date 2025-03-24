@@ -6,7 +6,7 @@ export const createThread = asyncHandler(async (req, res, next) =>{
     const {name, title, message:messageContent, email} = req.body
      
     if(!name || !title || !messageContent || !email){
-        return res.status(400).json({message: "All fielda are required"})
+        return res.status(400).json({message: "All fields are required"})
     }
 
     const thread = await Thread.create({title,message:messageContent, name, email})
@@ -23,7 +23,7 @@ export const createThread = asyncHandler(async (req, res, next) =>{
 
     export const updateThread = asyncHandler(async (req, res, next)=>{
         const { id } = req.params
-        const { title, content, name, email} = req.body
+        const { title,  message: messageContent, name, email} = req.body
 
         if(!mongoose.Types.ObjectId.isValid(id)){
             return res.status(400).json({message: "Invalid thread id"})
@@ -31,7 +31,7 @@ export const createThread = asyncHandler(async (req, res, next) =>{
 
         const toUpdate = {}
         if(title) toUpdate.title = title
-        if(content) toUpdate.messageContent = messageContent
+        if(messageContent) toUpdate.messageContent = messageContent
         if(name) toUpdate.name = name
         if(email) toUpdate.email = email
 
@@ -42,7 +42,7 @@ export const createThread = asyncHandler(async (req, res, next) =>{
         // TODO: change query so that you can delete your own thread
         const thread = await Thread.findByIdAndUpdate(id, toUpdate, {new: true}).exec()
         if(!thread){
-            return res.status(400).json({message: "Thread not found"})
+            return res.status(404).json({message: "Thread not found"})
         }
 
         res.status(200).json(thread)

@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 
 export const createMessage = asyncHandler (async (req, res, next)=> {
     const { name, email ,message:messageContent } = req.body
+    //  const user = req.user._id 
     const threadId = req.params.threadId
 
     if(!name || !email || !messageContent) {
