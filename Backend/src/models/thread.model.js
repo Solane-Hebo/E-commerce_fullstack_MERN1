@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 const threadSchema = new mongoose.Schema({
     name: {type: String, required: true},
     title: {type: String, required: true},
-    // user
+    user:{type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false},
     email: {type: String, required: true, match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email']},
     messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
     // replies

@@ -7,6 +7,7 @@ import asyncHandler from "express-async-handler";
 export const createProductList = asyncHandler(async (req, res) => {
     
     const { name, title, description, price} = req.body;
+    const author = req.user._id
     
     const parsedPrice = parseFloat(price);
     let category = req.body.category?.trim(); 
@@ -38,7 +39,7 @@ export const createProductList = asyncHandler(async (req, res) => {
         description,
         price: parsedPrice,
         images: imagePaths,
-        category,
+        category, author
     });
 
     res.status(201).json(productList);

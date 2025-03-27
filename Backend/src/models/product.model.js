@@ -14,6 +14,12 @@ const productsSchema = new mongoose.Schema({
     price:{
         type: Number,
         required: [true, "product price is required"],
+        set: (v) => {
+            if (typeof v === 'string') {
+                return Number(v.replace(/\s/g, '')); 
+            }
+            return v;
+        }
          
     },
     description: {
@@ -24,7 +30,7 @@ const productsSchema = new mongoose.Schema({
     images: {
         type: [String],
         required: [true, "product image is required"],
-        trim: true
+        
     },
     category: {
         type: String,
