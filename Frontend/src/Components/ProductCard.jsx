@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
+import { useCart } from "./CartContext";
+
 import "./Styles/ProductCard.css";
 
 const ProductCard = ({ product }) => {
+
+  const { addToCart } = useCart();
+
   return (
     <div className="card shadow-sm border-0">
       <Link to={`/product/${product._id}`} className="text-decoration-none text-dark">
@@ -17,9 +22,13 @@ const ProductCard = ({ product }) => {
           <p className="card-text text-muted mb-2">
             {product.price ? `${product.price} :- SEK` : "Price Unavailable"}
           </p>
-          <button className="btn btn-primary w-100">View Product</button>
         </div>
       </Link>
+      <div className="card-footer bg-white border-0 p-3">
+    <button className="btn btn-primary w-100" onClick={() => addToCart(product)}>
+      Add To Cart
+    </button>
+  </div>
     </div>
   );
 };

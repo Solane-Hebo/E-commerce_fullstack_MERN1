@@ -1,145 +1,120 @@
-import React, { useState, createContext, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, createContext, useContext, useEffect } from 'react';
+import axios from '../api/axios';
 
-// Skapa en kontext för autentisering
-const AuthContext = createContext();
+export const AuthContext = createContext()
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  
-  const login = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
-    localStorage.setItem('authToken', authToken);
+const AuthContextProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
+  const [token, setToken] = useState(null)
+  const [authReady, setAuthReady] = useState(false)
+  const [rememberUser, setRememberUser] = useState(false)
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const storedToken = sessionStorage.getItem('jwt')
+        if (!storedToken) return
+
+        const res = await axios.get('/api/auth/check', {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        });
+
+        if (res.status === 200) {
+          setToken(storedToken);
+          setUser(res.data);
+        }
+      } catch (error) {
+        sessionStorage.removeItem('jwt');
+      } finally {
+        setAuthReady(true);
+      }
+    };
+
+    checkToken();
+  }, []);
+
+  const register = async (formData) => {
+    const res = await axios.post('/api/auth/register', formData);
+    if (res.status === 201) {
+      const token = res.data.token;
+      const user = {
+        _id: res.data.user._id,
+        firstName: res.data.user.firstName,
+        lastName: res.data.user.lastName,
+        role: res.data.user.role,
+      };
+
+      setToken(token);
+      setUser(user);
+      sessionStorage.setItem('jwt', token);
+
+      if (rememberUser) {
+        localStorage.setItem('rememberUser', 'true');
+      }
+    }
+  };
+
+  const login = async (formData) => {
+    const res = await axios.post('/api/auth/login', formData)
+    if (res.status === 200) {
+      const token = res.data.token;
+      const user = {
+        _id: res.data._id,
+        name: res.data.name,
+        role: res.data.role,
+      };
+
+      setToken(token);
+      setUser(user);
+      sessionStorage.setItem('jwt', token);
+
+      if (rememberUser) {
+        localStorage.setItem('rememberUser', 'true');
+      }
+
+      return { token, user };
+    }
   };
 
   const logout = () => {
-    setUser(null);
+    sessionStorage.removeItem('jwt');
+    localStorage.removeItem('rememberUser');
     setToken(null);
-    localStorage.removeItem('authToken');
+    setUser(null);
+    setRememberUser(false);
   };
 
-  return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => useContext(AuthContext);
-
-const Register = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-  
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-  
-  const validateForm = () => {
-    let newErrors = {};
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)) {
-      newErrors.email = 'Ogiltigt e-postformat';
-    }
-    if (formData.password.length < 6) {
-      newErrors.password = 'Lösenord måste vara minst 6 tecken';
-    }
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Lösenorden matchar inte';
-    }
-    return newErrors;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
-    // Simulerad API-anrop
-    setTimeout(() => {
-      const fakeUser = { email: formData.email };
-      const fakeToken = '123456';
-      login(fakeUser, fakeToken);
-      navigate('/dashboard');
-    }, 2000);
-  };
-
-  return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="email" name="email" placeholder="E-post" onChange={handleChange} />
-        {errors.email && <p>{errors.email}</p>}
-        
-        <input type="password" name="password" placeholder="Lösenord" onChange={handleChange} />
-        {errors.password && <p>{errors.password}</p>}
-        
-        <input type="password" name="confirmPassword" placeholder="Bekräfta lösenord" onChange={handleChange} />
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        
-        <button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Registrerar...' : 'Registrera'}</button>
-      </form>
-    </div>
-  );
-};
-
-const Login = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulerad API-anrop
-    setTimeout(() => {
-      if (formData.email === 'test@example.com' && formData.password === 'password123') {
-        const fakeUser = { email: formData.email };
-        const fakeToken = '123456';
-        login(fakeUser, fakeToken);
-        navigate('/dashboard');
+  const toggleRememberUser = () => {
+    setRememberUser((state) => {
+      if (!state) {
+        localStorage.setItem('rememberUser', 'true');
       } else {
-        setError('Ogiltigt e-post eller lösenord');
+        localStorage.removeItem('rememberUser');
       }
-      setIsSubmitting(false);
-    }, 2000);
+      return !state;
+    });
   };
-  
-  return (
-    <div>
-      <h1>Logga in</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="email" name="email" placeholder="E-post" onChange={handleChange} />
-        <input type="password" name="password" placeholder="Lösenord" onChange={handleChange} />
-        <button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Loggar in...' : 'Logga in'}</button>
-      </form>
-      {error && <p>{error}</p>}
-    </div>
-  );
+
+  const value = {
+    user,
+    token,
+    login,
+    register,
+    logout,
+    rememberUser,
+    toggleRememberUser,
+    authReady,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export { Register, Login };
+export default AuthContextProvider;
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error('useAuth must be called inside an AuthContextProvider');
+  return context;
+};

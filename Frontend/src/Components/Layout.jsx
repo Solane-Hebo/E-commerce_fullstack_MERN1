@@ -6,7 +6,7 @@ const Layout = () => {
     <div className="bg-slate-700 min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow p-4">
-        <Outlet /> {/* ✅ This dynamically renders child components */}
+        <Outlet /> 
       </main>
     </div>
   );

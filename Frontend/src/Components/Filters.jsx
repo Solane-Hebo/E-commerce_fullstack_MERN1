@@ -5,7 +5,7 @@ const Filters = ({ onFilterChange, categories = [] }) => {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [searchTerm, setSearchTerm] = useState('');
 
-  // ✅ Optimized: Call `onFilterChange` only when state changes
+  //  Optimized: Call `onFilterChange` only when state changes
   useEffect(() => {
     onFilterChange({ category, priceRange, searchTerm });
   }, [category, priceRange, searchTerm, onFilterChange]);

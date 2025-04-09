@@ -1,43 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Navigate, Link } from 'react-router-dom';
-import '../Components/Styles/OrderHistory.css';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import '@/Components/Styles/Home.css';
+import axios from "../api/axios";
+import { useAuth } from '../Components/AuthContext';
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const userToken = useSelector((state) => state.user.token);
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { token } = useAuth();
 
   useEffect(() => {
-    if (userToken) {
-      fetchOrders();
-    }
-  }, [userToken]);
+    getOrders();
+  }, []);
 
-  const fetchOrders = async () => {
+  const getOrders = async () => {
     setLoading(true);
     setError(null);
-
     try {
-      const response = await fetch('https://js2-ecommerce-api.vercel.app/api/orders', {
-        method: 'GET',
+      const res = await axios.get('/api/order', {
         headers: {
-          'Authorization': `Bearer ${userToken}`,
-          'Content-Type': 'application/json',
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
-
-      if (!response.ok) {
-        throw new Error(`Error fetching order history: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      setOrders(data.orders || data);
-    } catch (error) {
-      setError(error.message);
+      setOrders(res.data);
+    } catch (err) {
+      setError("Failed to fetch orders");
     } finally {
       setLoading(false);
     }
@@ -45,46 +36,28 @@ const OrderHistory = () => {
 
   const createOrder = async () => {
     try {
-      const response = await fetch('https://js2-ecommerce-api.vercel.app/api/orders', {
-        method: 'POST',
+      const res = await axios.post('/api/order', {
+        products: [
+          { product: 'yourValidProductIdHere', quantity: 1 }
+        ]
+      }, {
         headers: {
-          'Authorization': `Bearer ${userToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: [
-            { productId: "64df2b3f3fc5a10b7c4b8c5f", quantity: 1 },
-            { productId: "64df2b3f3fc5a10b7c4b8c60", quantity: 2 }
-          ],
-        }),
+          Authorization: `Bearer ${token}`
+        }
       });
-
-      if (!response.ok) {
-        throw new Error(`Error creating order: ${response.statusText}`);
+      if (res.status === 201) {
+        getOrders(); // Refresh after creating
       }
-
-      const data = await response.json();
-      console.log("Order created:", data);
-      alert("Order created!");
-      fetchOrders();
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+      setError("Failed to create test order");
     }
   };
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
 
   return (
     <div className="container mt-5">
       <h1 className="mb-4">Order History</h1>
 
-      <button className="btn btn-success mb-3" onClick={createOrder}>
-        Create a Test Order
-      </button>
-
-      <button className="btn btn-outline-secondary mb-3" onClick={fetchOrders}>
+      <button className="btn btn-outline-secondary mb-3" onClick={getOrders}>
         Refresh Order History
       </button>
 
@@ -99,10 +72,10 @@ const OrderHistory = () => {
       ) : orders.length > 0 ? (
         <div className="row">
           {orders.map((order) => (
-            <div key={order.id} className="col-md-6 mb-3">
+            <div key={order._id} className="col-md-6 mb-3">
               <div className="card shadow-sm">
                 <div className="card-body">
-                  <h5 className="card-title">Order Number: {order.id}</h5>
+                  <h5 className="card-title">Order Number: {order._id}</h5>
                   <p className="card-text">Total Products: <strong>{order.totalQuantity}</strong></p>
                   <p className="card-text">Total Price: <strong>{order.totalPrice} kr</strong></p>
                 </div>

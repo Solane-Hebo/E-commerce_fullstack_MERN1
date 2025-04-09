@@ -1,77 +1,99 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { login } from '../../Store/userSlice';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../AuthContext'
+import { useCart } from '../CartContext'
+import { RiLoaderFill } from 'react-icons/ri'
+import { useDispatch } from 'react-redux'
 
+const LoginPage = () => {
+  const [formData, setFormData] = useState({ email: '', password: '' })
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-const Login = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login, rememberUser, toggleRememberUser } = useAuth()
+  const { resetCart } = useCart()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const dispatch = useDispatch()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setError('');
 
-    setTimeout(() => {
-      if (email === 'test@example.com' && password === 'password123') {
-        const fakeUser = { email };
-        const fakeToken = '123456';
+    if (!formData.email || !formData.password) {
+      setError('Please fill in all fields')
+      return;
+    }
 
-        dispatch(login({ user: fakeUser, token: fakeToken }));
-        navigate('/dashboard');
-      } else {
-        setError('Incorrect email or password. Please check your credentials and try again.');
-      }
+    setLoading(true)
+    setError('')
 
-      setIsSubmitting(false);
-    }, 2000);
+    try {
+      await login(formData)
+      resetCart()
+      navigate(location.state?.from || '/')
+    } catch (error) {
+      setError(error.response?.data?.message || 'Something went wrong')
+    } finally {
+      setLoading(false)
+    }
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card p-4 shadow">
-            <h2 className="text-center mb-4">Login</h2>
-            {error && <div className="alert alert-danger">{error}</div>}
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label className="form-label">Email</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-              <button className="btn btn-primary w-100" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Logging in...' : 'Login'}
-              </button>
-            </form>
-          </div>
+    <div className="card p-4 shadow-sm mx-auto mt-5" style={{ maxWidth: '400px' }}>
+      <h1 className="text-center h3 mb-4">Login</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            className="form-control"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+            }
+          />
         </div>
-      </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            className="form-control"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+            }
+          />
+        </div>
+        <div className="form-check mb-3">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="persist"
+            checked={rememberUser}
+            onChange={toggleRememberUser}
+          />
+          <label className="form-check-label" htmlFor="persist">
+            Remember me
+          </label>
+        </div>
+        <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+          {loading ? (
+            <span className="d-flex align-items-center justify-content-center gap-2">
+              <RiLoaderFill className="me-2 spinner-border spinner-border-sm" /> Loading
+            </span>
+          ) : (
+            'Login'
+          )}
+        </button>
+      </form>
+      {error && <p className="text-danger text-center mt-3">{error}</p>}
+      <p className="text-center mt-3">
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

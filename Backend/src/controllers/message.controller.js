@@ -32,6 +32,23 @@ export const createMessage = asyncHandler (async (req, res, next)=> {
 
 })
 
+export const createGeneralMessage = asyncHandler(async (req, res) => {
+    const { name, email, message } = req.body;
+
+    if (!name || !email || !message) {
+        return res.status(400).json({ message: 'name, email and message are required' });
+    }
+
+    const newMessage = await Message.create({
+        name,
+        email,
+        content: message,
+    });
+
+    res.status(201).json({ message: "Message sent successfully", data: newMessage });
+});
+
+
 
 export const deleteMessage = asyncHandler(async (req, res, next)=>{
   const {id}  = req.params

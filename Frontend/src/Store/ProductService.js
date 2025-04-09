@@ -8,7 +8,7 @@ const getAll = async () => {
   }
 
   try {
-    const response = await axios.get('https://js2-ecommerce-api.vercel.app/api/products');
+    const response = await axios.get('api/products');
 
     // Validate the response format
     if (Array.isArray(response.data)) {

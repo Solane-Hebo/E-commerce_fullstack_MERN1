@@ -4,9 +4,8 @@ const initialState = {
   cart: [],
   totalPrice: 0,
   totalQuantity: 0,
-};
+}
 
-// Helper functions
 const getTotalPrice = (cart) =>
   cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
@@ -69,8 +68,8 @@ export const cartSlice = createSlice({
   },
 });
 
-//  Export actions
+
 export const { addToCart, removeOne, removeItem, clearCart } = cartSlice.actions;
 
-//  Fix: Default Export
+
 export default cartSlice.reducer;

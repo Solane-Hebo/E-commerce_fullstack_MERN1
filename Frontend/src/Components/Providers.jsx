@@ -1,14 +1,18 @@
 import { Provider } from "react-redux";
 import { store } from "../Store"; 
 import CartContextProvider from "./CartContext";
+import AuthContextProvider from "./AuthContext";
 
 const Providers = ({ children }) => {
   return (
     <Provider store={store}>  {/*Wrap Redux store */}
-      <CartContextProvider>
+
+   <AuthContextProvider> 
+       <CartContextProvider>
         {children}
-      </CartContextProvider>
-    </Provider>
+       </CartContextProvider>
+    </AuthContextProvider>
+     </Provider> 
   );
 };
 

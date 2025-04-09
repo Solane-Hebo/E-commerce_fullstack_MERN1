@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import axios from "../api/axios"
 import { useCart } from './CartContext';
 
 const ProductList = () => {
@@ -18,7 +18,7 @@ const ProductList = () => {
     const getProducts = async () => {
       setLoading(true);
       try {
-        const res = await axios.get('https://js2-ecommerce-api.vercel.app/api/products');
+        const res = await axios.get('/api/products');
         setProducts(res.data);
       } catch (error) {
         setError(error.response?.data?.message || 'Something went wrong while fetching the products.');

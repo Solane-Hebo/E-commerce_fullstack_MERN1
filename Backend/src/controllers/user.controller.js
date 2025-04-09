@@ -29,7 +29,15 @@ export const register = asyncHandler(async (req, res) =>{
 
     const token = generateToken(user)
 
-    res.status(201).json({ _id: user._id, firstName: user.firstName, token, role: user.role})
+    res.status(201).json({
+        token,
+        user: {
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role
+        }
+    })
 
 })
 
@@ -43,13 +51,13 @@ export const login = asyncHandler(async(req, res) => {
     const user = await User.findOne({ email}).exec()
 
     if(!user) {
-        return res.status(401).json({ message: 'Invalid credentials' })
+        return res.status(401).json({ message: 'Invalid formData' })
     }
 
     const match = await bcrypt.compare(password, user.password)
 
     if(!match) {
-        return res.status(401).json({ message: 'Invalid credentials' })
+        return res.status(401).json({ message: 'Invalid formData' })
     }
 
     const token = generateToken(user)
@@ -91,4 +99,14 @@ export const updateRole = asyncHandler(async (req, res) => {
     await user.save()
 
     res.status(200).json({message: 'Role updated to ' + normalizedRole})
+})
+
+export const checkToken = asyncHandler(async(req, res) => {
+    res.status(200).json({
+            _id: req.user._id,
+            firstName: req.user.firstName,
+            lastName: req.user.lastName,
+            role: req.user.role
+        
+    })
 })

@@ -16,6 +16,7 @@ const userSlice = createSlice({
             state.user = action.payload.user;
         },
         logout(state) {
+            console.log("Redux logout triggered")
             state.isAuthenticated = false;
             state.token = null;
             state.user = null;

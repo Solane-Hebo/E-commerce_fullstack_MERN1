@@ -1,10 +1,18 @@
 import React, {useState} from 'react'
+import axios from '../api/axios'
+import { useAuth } from "./AuthContext";
+
+
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({name: '', email: '', message: '' })
     const [errors, setErrors] = useState({})
     const [successMessage, setSuccessMessage] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [message, setMessage] = useState('')
+
+    const { user } = useAuth()
+
 
 
     // Valideringsfunktion
@@ -12,15 +20,15 @@ const ContactForm = () => {
     const validateForm =() => {
         const newErrors =  {}
         if (!formData.name.trim()) {
-            newErrors.name = 'Namn är obligatoriskt.'
+            newErrors.name = 'Name is required.'
         }
         if (!formData.email.trim()) {
-            newErrors.email = 'E-post är obligatoriskt.'
+            newErrors.email = 'Email is required.'
         } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-            newErrors.email = 'Ogiltigt e-postformat.'
+            newErrors.email = 'Invalid email.'
         }
         if (!formData.message.trim()) {
-            newErrors.message = 'Meddelande är obligatoriskt.'
+            newErrors.message = 'Message is required.'
         }
         return newErrors
     }
@@ -43,20 +51,16 @@ const ContactForm = () => {
 
         
         try {
-            const response = await fetch('https://js2-ecommerce-api.vercel.app/api/orders', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json' },
-                body: JSON.stringify(formData), 
-        })
+            const response = await axios.post('/api/messages', formData);
 
-            if (response.ok) {
-                setSuccessMessage('Ditt meddelande har skickats!')
-                setFormData({name: '', email: '', message: ''})
+            if (response.status === 200 || response.status === 201) {
+                setSuccessMessage('Your message is sent successfully!');
+                setFormData({ name: '', email: '', message: '' });
             } else {
-                setErrors({api: 'Ett fel inträffade, försök igen.'})
+                setErrors({ api: 'Error sending message, try again.' });
             }
         } catch (error) {
-            setErrors({api: 'Nätverksfel. Försök igen senare.'})
+            setErrors({api: 'Network error.'})
         } finally {
             setIsSubmitting(false)
         }

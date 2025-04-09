@@ -1,26 +1,37 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../Store/ProductSlice';
-import { useNavigate } from 'react-router-dom';
-import ProductCard from '../Components/ProductCard';
-import HeroSection from '../Components/HeroSection';
-import CategoryFilter from '../Components/CategoryFilter';
-import SubscriptionForm from '../Components/SubscriptionForm';
-import '@/Components/Styles/Home.css';
+import { useState, useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import ProductCard from '../Components/ProductCard'
+import HeroSection from '../Components/HeroSection'
+import CategoryFilter from '../Components/CategoryFilter'
+import SubscriptionForm from '../Components/SubscriptionForm'
+import '@/Components/Styles/Home.css'
+import axios from "../api/axios"
+
 
 const Home = () => {
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [categorySearch, setCategorySearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [categorySearch, setCategorySearch] = useState('')
   const [visibleCount, setVisibleCount] = useState(6);
+  const [products, setProducts] = useState([])
+
 
   const dispatch = useDispatch();
-  const navigate = useNavigate(); //Hook for navigation
+  const navigate = useNavigate(); 
 
-  const { products, error, loading } = useSelector((state) => state.productList);
+  
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+    const getProducts = async () => {
+      const res = await axios.get('api/products')
+      if(res.status !== 200) return 
+
+        setProducts(res.data)
+      }
+
+      getProducts()
+    
+  }, [])
 
   const categories = useMemo(
     () => [...new Set(products.map((product) => product.category))],
@@ -36,11 +47,9 @@ const Home = () => {
   const handleLoadMore = () => setVisibleCount((prev) => prev + 6);
 
   const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`); // Navigate to product details
+    navigate(`/product/${productId}`); 
   };
 
-  if (loading) return <div className="loading">Loading products...</div>;
-  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="container">
@@ -54,13 +63,13 @@ const Home = () => {
       />
 
       <section className="product-section">
-        <h2>Featured Products</h2>
+        <h2>Products</h2>
         <div className="product-list">
           {filteredProducts.slice(0, visibleCount).map((product) => (
             <div 
               key={product._id} 
               className="product-card-wrapper" 
-              onClick={() => handleProductClick(product._id)} // Make the entire card clickable
+              onClick={() => handleProductClick(product._id)} 
             >
               <ProductCard product={product} />
             </div>

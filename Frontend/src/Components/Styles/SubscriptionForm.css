@@ -30,17 +30,17 @@
   }
   
   .form-input:focus {
-    border-color: #007bff;
+    border-color: #036803;
     outline: none;
   }
   
   .input-error {
-    border-color: #e74c3c;
+    border-color: #0e942f;
     background-color: #fee;
   }
   
   .subscribe-btn {
-    background:  #e74c3c;
+    background:  #0b3e17;
     color: #fff;
     border: none;
     padding: 12px 20px;
@@ -52,7 +52,7 @@
   }
   
   .subscribe-btn:hover {
-    background: #ff1d04;
+    background: #0e942f;
   }
   
   
@@ -74,9 +74,9 @@
   }
   
   .error {
-    color: #e74c3c;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
+    color: #0e942f;
+    background-color: #d7f8d9;
+    border: 1px solid #cbf5c6;
   }
   
   @media (max-width: 600px) {
@@ -89,5 +89,18 @@
       font-size: 14px;
       padding: 10px;
     }
+  }
+
+  .shopping-cart-wrapper {
+    max-height: 90vh; /* Max height of the full cart */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .shopping-cart-scroll {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-right: 8px; /* For scrollbar space */
+    max-height: 60vh; /* Adjust to your layout */
   }
   

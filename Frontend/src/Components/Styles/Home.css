@@ -1,8 +1,8 @@
 /* Root Variables */
 :root {
-  --primary-color: #ff4500;
-  --secondary-color: #f44336;
-  --button-hover: #ff6347;
+  --primary-color: #058625;
+  --secondary-color: #21893b;
+  --button-hover:#067a23;
   --text-color: #222;
   --bg-light: #f9f9f9;
   --bg-dark: #222;
@@ -32,22 +32,23 @@ body {
   padding: 2rem 1.5rem;
 }
 
-/* ✅ HERO SECTION */
+/*  HERO SECTION */
 .hero-section {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   background: linear-gradient(to right, #f0f0f0, #e0e0e0);
   border-radius: var(--border-radius);
-  padding: 60px 50px;
+  padding: 60px 50px; 
   gap: 40px;
   flex-wrap: wrap;
   margin-bottom: 2rem;
 }
 
 .hero-content {
-  max-width: 50%;
+  max-width: 100%;
   text-align: center;
+  overflow: hidden;
 }
 
 .hero-subtitle {
@@ -78,7 +79,7 @@ body {
   border-radius: var(--border-radius);
 }
 
-/* ✅ BUTTONS */
+/* BUTTONS */
 .btn {
   background-color: var(--primary-color);
   color: #fff;
@@ -112,10 +113,10 @@ body {
 }
 
 .btn-reset:hover {
-  background-color: #d32f2f;
+  background-color: #03f840;
 }
 
-/* ✅ CATEGORY SECTION */
+/* CATEGORY SECTION */
 .category-section {
   text-align: center;
   margin-top: 2rem;
@@ -141,7 +142,7 @@ body {
   max-width: 350px;
 }
 
-/* ✅ PRODUCT SECTION */
+/*  PRODUCT SECTION */
 .product-section {
   text-align: center;
   margin-bottom: 2rem;
@@ -179,12 +180,12 @@ body {
   color: #777;
 }
 
-/* ✅ SUBSCRIPTION SECTION */
+/* SUBSCRIPTION SECTION */
 .subscription-section {
   text-align: center;
   background: var(--bg-dark);
   color: white;
-  padding: 50px 20px;
+  padding: 30px 10px;
   border-radius: var(--border-radius);
 }
 
@@ -209,7 +210,7 @@ body {
   margin-top: 10px;
 }
 
-/* ✅ FOOTER */
+ /* FOOTER */
 .footer {
   background: var(--bg-dark);
   color: #fff;
@@ -233,7 +234,7 @@ body {
 
 .footer-section h3 {
   font-size: 18px;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px;s */
   color: var(--accent-color);
 }
 
@@ -264,7 +265,7 @@ body {
   color: #bbb;
 }
 
-/* ✅ RESPONSIVE DESIGN */
+/* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {
   .hero-section {
     flex-direction: column;

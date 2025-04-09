@@ -1,55 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect, useRef } from 'react';
 import ShoppingCart from './ShoppingCart';
+import { useAuth } from './AuthContext';
+import axios from '../api/axios';
+import { useCart } from './CartContext';
 
-const Dropdown = ({ children }) => {
+const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const { token, user, authReady } = useAuth();
+  const { cart } = useCart();
 
-  // Handle ESC key to close the dropdown
+  
   useEffect(() => {
-    const handleEscKey = (event) => {
-      if (event.key === 'Escape') {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
-
-    window.addEventListener('keydown', handleEscKey);
-    return () => {
-      window.removeEventListener('keydown', handleEscKey);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') setIsOpen(false);
     };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
   }, []);
 
-  return (
-    <div className="relative inline-block">
-      {isOpen && <DropdownBG closeDropdown={() => setIsOpen(false)} />}
+ 
 
-      {/* Button to toggle the dropdown */}
+  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0)
+
+  return (
+    <div ref={dropdownRef} className="position-relative d-inline-block me-3">
       <button
-        onClick={() => setIsOpen((state) => !state)}
-        className="relative"
-        aria-expanded={isOpen ? 'true' : 'false'}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="btn btn-link position-relative"
+        aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        {children}
+        <i className="fa-solid fa-cart-shopping"></i>
+             {totalQuantity > 0 && (
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {totalQuantity}
+              </span>
+            
+        )}
       </button>
 
-      {/* Dropdown content */}
       {isOpen && (
-        <div className="absolute bg-white w-[450px] right-0 z-10 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-10">
-          <div className="py-1">
-            <ShoppingCart setIsOpen={setIsOpen} />
-          </div>
-        </div>
+        <div className="position-relative end-0 mt-2 bg-white rounded shadow-lg p-3" style={{ width: '450px', zIndex: 1000 }}>
+          <ShoppingCart setIsOpen={setIsOpen} />
+            </div>
       )}
     </div>
   );
 };
 
-const DropdownBG = ({ closeDropdown }) => {
-  return ReactDOM.createPortal(
-    <div className="fixed inset-0 bg-black bg-opacity-30" onClick={closeDropdown} />,
-    document.querySelector('#modal')
-  );
-};
-
 export default Dropdown;
+
+export const updateCartItem = async (id, token, data = {}) => {
+  if (!token) throw new Error("No auth token provided")
+  try {
+    const res = await axios.patch(`/api/ShoppingCart/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Failed to update cart item:", error);
+    throw error;
+  }
+};
+  
+
+  

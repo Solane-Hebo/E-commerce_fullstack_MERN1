@@ -1,35 +1,46 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { FaCartArrowDown } from "react-icons/fa";
-import { useCart } from './CartContext';
+
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { FaCartArrowDown } from "react-icons/fa"
+import { useCart } from './CartContext'
+import axios from "../api/axios"
+
 
 const ProductDetails = () => {
-  const { productId } = useParams();
-  const { addToCart } = useCart();
+  const { productId } = useParams()
+  const { addToCart } = useCart()
+  const navigate = useNavigate()
 
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const [product, setProduct] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const getProduct = async () => {
-      setLoading(true);
       try {
-        const res = await axios.get(`https://js2-ecommerce-api.vercel.app/api/products/${productId}`);
-        setProduct(res.data);
-      } catch (error) {
-        setError(error.response?.data?.message || 'Something went wrong while fetching the product.');
+        const res = await axios.get('api/products')
+        
+        if (res.status !== 200) {
+          throw new Error("Failed to fetch products")
+        }
+  
+        const foundProduct = res.data.find(p => p._id.toString() === productId);
+        setProduct(foundProduct);
+      } catch (err) {
+        setError("Failed to load product.");
       } finally {
         setLoading(false);
       }
     };
-
+  
     getProduct();
   }, [productId]);
+  
 
   const handleClick = () => {
     addToCart(product);
+    navigate('/')
   };
 
   if (error) {

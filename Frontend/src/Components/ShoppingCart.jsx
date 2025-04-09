@@ -1,20 +1,64 @@
-import { useCart } from "./CartContext";
-import CartItem from "./CartItem";
-import { Link } from "react-router-dom";
+import { useCart } from "./CartContext"
+import CartItem from "./CartItem"
+import { Link } from "react-router-dom"
+import './Styles/ShoppingCart.css'
+import axios from '../api/axios'
+import { useAuth } from "./AuthContext"
+
 
 const ShoppingCart = ({ setIsOpen, isCheckout }) => {
-  const { cart, addToCart, removeOne, removeItem, clearCart } = useCart();
-  const totalPrice = cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  const { cart, clearCart } = useCart()
+  const { token } = useAuth()
+  
+
+  const validCartItems = cart.filter(item => item && item.product)
+
+  const totalPrice = validCartItems.reduce((total, item) => {
+    const price = typeof item.product.price === 'number' ? item.product.price : 0
+    return total + price * item.quantity
+  }, 0);
+
+  const handlePlaceOrder = async () => {
+    try {
+      await axios.post('/api/order', {
+        products: cart.map(item => ({
+          product: item.product._id || item.product.id,
+          quantity: item.quantity
+        }))
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      clearCart();
+      alert("Order Placed Successfully!")
+
+    } catch (err) {
+      console.error('Failed to place order:', err)
+      alert("Something went wrong while placing your order.")
+    }
+  };
+
+  const handleNavClick = () => {
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse.classList.contains('show')) {
+      const bsCollapse = new window.bootstrap.Collapse(navbarCollapse, {
+        toggle: true
+      });
+      bsCollapse.hide();
+    }
+  };
+  
 
   return (
-    <div className="container text-dark">
+    <div className="shoppingcart-container text-dark cart-scroll">
       <div>
-        {cart.length === 0 ? (
+        {validCartItems.length === 0 ? (
           <div className="p-3 text-center alert alert-info">
             <p>Your cart is empty</p>
           </div>
         ) : (
-          cart.map((item) => (
+          validCartItems.map((item) => (
             <CartItem key={`cart_${item.product._id || item.product.id}`} item={item} />
           ))
         )}
@@ -28,22 +72,23 @@ const ShoppingCart = ({ setIsOpen, isCheckout }) => {
 
         {isCheckout ? (
           <button
-            onClick={() => {
-              clearCart();
-              alert("Order Placed Successfully!");
-            }}
-            className="btn btn-success px-4 py-2"
-          >
+          onClick={handlePlaceOrder}
+          className="btn btn-success px-4 py-2"
+        >
             Place Order
           </button>
         ) : (
           <Link
-            onClick={() => setIsOpen && setIsOpen(false)}
-            to="/checkout"
-            className="btn btn-dark px-4 py-2"
-          >
-            Checkout
-          </Link>
+          onClick={() => {
+            if (setIsOpen) setIsOpen(false);
+            handleNavClick();
+          }}
+          to="/checkout"
+          className="btn btn-dark px-4 py-2"
+        >
+          Checkout
+        </Link>
+        
         )}
       </div>
     </div>

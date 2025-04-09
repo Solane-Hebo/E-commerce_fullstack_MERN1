@@ -13,11 +13,12 @@ import OrderHistory from './Pages/OrderHistory';
 import Login from './Components/Auth/Login';
 import Register from './Components/Auth/Register';
 import ContactForm from './Components/ContactForm';
+import ProfilePage from './Pages/ProfilePage';
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,  // Layout wrapper with Navbar and Outlet
+    element: <Layout />,
     children: [
       { index: true, element: <Home /> },
       { path: "products", element: <ProductList /> },
@@ -34,15 +35,19 @@ export const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "contact", element: <ContactForm /> },
+      {
+        path: 'profile',
+        element: <ProfilePage />
+      },
       { path: "*", element: <h2>Page Not Found</h2> },
     ],
   },
 ]);
 
-//Wrap app inside Providers to fix Redux & Context issues
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Providers> {/* Now Redux & Cart Context are available globally */}
+    <Providers> 
       <RouterProvider router={router} />
     </Providers>
   </StrictMode>
