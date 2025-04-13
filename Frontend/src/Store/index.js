@@ -1,9 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
-import ProductListSlice from './ProductSlice';
-import shoppingCartReducer from "./CartSlice";  //Import as default export
-import userReducer from "./userSlice";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { configureStore } from "@reduxjs/toolkit"
+import ProductListSlice from './ProductSlice'
+import shoppingCartReducer from "./CartSlice"
+import userReducer from "./userSlice"
+import '@fortawesome/fontawesome-free/css/all.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export const store = configureStore({
   reducer: {
@@ -11,4 +11,4 @@ export const store = configureStore({
     shoppingCart: shoppingCartReducer,  
     user: userReducer,
   },
-});
+})

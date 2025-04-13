@@ -2,7 +2,7 @@ import express from "express"
 import ROLES from "../constants/roles.js"
 
 import { verifyRoles, verifyToken } from "../middleware/auth.middleware.js"
-import { cancelOrder, createOrder, getAllOrders, getUserOrders, updateOrderStatus } from "../controllers/order.controller.js"
+import { cancelOrder, createOrder, getAllOrders, getOrdersById, getUserOrders, updateOrderStatus } from "../controllers/order.controller.js"
 
 
 
@@ -16,6 +16,9 @@ router.get("/",verifyToken,
 
 router.get ("/all", verifyToken, 
     verifyRoles(ROLES.ADMIN, ROLES.MODERATOR, ROLES.CUSTOMER), getAllOrders)
+
+router.get("/:id", verifyToken, 
+        verifyRoles(ROLES.ADMIN, ROLES.MODERATOR, ROLES.CUSTOMER), getOrdersById)
 
 router.patch("/:id/status", verifyToken, 
     verifyRoles(ROLES.ADMIN, ROLES.MODERATOR), updateOrderStatus)

@@ -1,11 +1,11 @@
 /* Root Variables */
 :root {
-  --primary-color: #058625;
-  --secondary-color: #21893b;
-  --button-hover:#067a23;
+  --primary-color: #037dff;
+  /* --secondary-color: #054797; */
+  --button-hover:#04408a;
   --text-color: #222;
   --bg-light: #f9f9f9;
-  --bg-dark: #222;
+  --bg-dark: #010101;
   --accent-color: #f4a51c;
   --border-radius: 8px;
   --container-width: 1200px;
@@ -21,7 +21,7 @@
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--bg-light);
-  color: var(--text-color);
+  /* color: var(--text-color); */
   line-height: 1.6;
 }
 
@@ -36,7 +36,6 @@ body {
 .hero-section {
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
   background: linear-gradient(to right, #f0f0f0, #e0e0e0);
   border-radius: var(--border-radius);
   padding: 60px 50px; 
@@ -62,7 +61,6 @@ body {
 .hero-title {
   font-size: 52px;
   font-weight: 700;
-  color: #000;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -83,8 +81,8 @@ body {
 .btn {
   background-color: var(--primary-color);
   color: #fff;
-  padding: 15px 35px;
-  font-size: 18px;
+  padding: 10px 15px;
+  font-size: 25px;
   font-weight: bold;
   border-radius: var(--border-radius);
   text-decoration: none;
@@ -99,6 +97,7 @@ body {
 .btn:hover {
   background-color: var(--button-hover);
   transform: translateY(-3px);
+  color: var(--bg-dark);
 }
 
 .btn-reset {
@@ -113,7 +112,7 @@ body {
 }
 
 .btn-reset:hover {
-  background-color: #03f840;
+  background-color: #054797;
 }
 
 /* CATEGORY SECTION */
@@ -175,10 +174,7 @@ body {
   margin-top: 10px;
 }
 
-.product-card p {
-  font-size: 14px;
-  color: #777;
-}
+
 
 /* SUBSCRIPTION SECTION */
 .subscription-section {
@@ -210,60 +206,7 @@ body {
   margin-top: 10px;
 }
 
- /* FOOTER */
-.footer {
-  background: var(--bg-dark);
-  color: #fff;
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.footer-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  max-width: var(--container-width);
-  margin: 0 auto;
-  gap: 20px;
-}
-
-.footer-section {
-  flex: 1;
-  min-width: 250px;
-}
-
-.footer-section h3 {
-  font-size: 18px;
-  /* margin-bottom: 15px;s */
-  color: var(--accent-color);
-}
-
-.footer-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-section ul li {
-  margin-bottom: 10px;
-}
-
-.footer-section ul li a {
-  text-decoration: none;
-  color: #ddd;
-  transition: color 0.3s;
-}
-
-.footer-section ul li a:hover {
-  color: var(--accent-color);
-}
-
-.footer-bottom {
-  margin-top: 20px;
-  border-top: 1px solid #444;
-  padding-top: 15px;
-  font-size: 13px;
-  color: #bbb;
-}
+  
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {

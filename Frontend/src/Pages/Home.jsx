@@ -12,14 +12,11 @@ import axios from "../api/axios"
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('')
   const [categorySearch, setCategorySearch] = useState('')
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(6)
   const [products, setProducts] = useState([])
 
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate(); 
-
-  
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getProducts = async () => {
@@ -81,11 +78,7 @@ const Home = () => {
           </button>
         )}
       </section>
-
       <SubscriptionForm />
-      <footer className="footer">
-        <p>&copy; 2024 BMARKETO SHOP. All Rights Reserved.</p>
-      </footer>
     </div>
   );
 };

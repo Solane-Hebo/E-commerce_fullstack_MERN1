@@ -1,9 +1,9 @@
 import { useCart } from "./CartContext"
-import CartItem from "./CartItem"
 import { Link } from "react-router-dom"
-import './Styles/ShoppingCart.css'
-import axios from '../api/axios'
+import CartItem from "./CartItem"
 import { useAuth } from "./AuthContext"
+import axios from '../api/axios'
+import './Styles/ShoppingCart.css'
 
 
 const ShoppingCart = ({ setIsOpen, isCheckout }) => {

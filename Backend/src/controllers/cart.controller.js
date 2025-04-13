@@ -1,20 +1,19 @@
 import asyncHandler from 'express-async-handler'
 import Cart from '../models/cart.model.js'
-import Product from '../models/product.model.js'
 import mongoose from 'mongoose'
 
 export const getCart = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user._id
 
-  const cart = await Cart.findOne({ user: userId }).populate('items.product');
+  const cart = await Cart.findOne({ user: userId }).populate('items.product')
 
-  res.status(200).json(cart?.items || []);
+  res.status(200).json(cart?.items || [])
 });
 
 export const updateCartItem = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
-  const { id } = req.params; 
-  const { quantity } = req.body;
+  const userId = req.user._id
+  const { id } = req.params
+  const { quantity } = req.body
 
  
 

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { RiLoaderFill } from "react-icons/ri";
-import { useAuth } from "../AuthContext";
+import { useState } from "react"
+import { Link, useNavigate } from "react-router"
+import { RiLoaderFill } from "react-icons/ri"
+import { useAuth } from "../AuthContext"
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,31 +12,31 @@ const Register = () => {
     repeatPassword: ""
   });
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  const { register, rememberUser, toggleRememberUser } = useAuth();
-  const navigate = useNavigate();
+  const { register, rememberUser, toggleRememberUser } = useAuth()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { firstName, lastName, email, password, repeatPassword } = formData;
+    e.preventDefault()
+    const { firstName, lastName, email, password, repeatPassword } = formData
 
     if (!email || !password || !firstName || !lastName || !repeatPassword) {
-      setError("Please fill in all fields");
-      return;
+      setError("Please fill in all fields")
+      return
     } else if (password !== repeatPassword) {
-      setError("Passwords do not match");
-      return;
+      setError("Passwords do not match")
+      return
     } else if (password.length < 6) {
-      setError("Password must be at least 6 characters long");
-      return;
+      setError("Password must be at least 6 characters long")
+      return
     }
 
-    setLoading(true);
-    setError("");
+    setLoading(true)
+    setError("")
     try {
-      await register(formData);
+      await register(formData)
       navigate("/");
     } catch (error) {
       setError(error.response?.data?.message || "Something went wrong");

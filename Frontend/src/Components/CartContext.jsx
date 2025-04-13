@@ -23,17 +23,19 @@ const CartContextProvider = ({ children }) => {
   
 
     const resetCart = useCallback(() => {
-      const savedCart = localStorage.getItem(getStorageKey());
-      setCart(savedCart ? JSON.parse(savedCart) : []);
+      setCart([]);
+      localStorage.removeItem(getStorageKey());
     }, [getStorageKey]);
     
-    const handleSave = async (productId, newQuantity) => {
+    
+    const handleSave = useCallback(async () => {
       try {
-        await updateCartItem(productId, token, { quantity: newQuantity });
+        if (!user?.token) return;
+        await syncCartToServer(cart, user.token)
       } catch (err) {
-        console.error('Failed to update item quantity:', err);
+        console.error("Failed to sync cart:", err)
       }
-    };
+    }, [cart, user])
     
     
 

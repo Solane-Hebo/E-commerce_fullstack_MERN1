@@ -15,17 +15,17 @@ const CartItem = ({ item }) => {
 
   const addOneToCart = () => {
     addToCart(item.product);
-    handleSave(productId, item.quantity + 1);
+    handleSave();
   };
 
   const removeOneFromCart = () => {
     removeOne(productId);
-    handleSave(productId, item.quantity - 1);
+    handleSave();
   };
 
   const deleteItem = () => {
     removeItem(productId);
-    handleSave(productId, 0);
+    handleSave();
   };
 
   return (

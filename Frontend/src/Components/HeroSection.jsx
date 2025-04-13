@@ -7,7 +7,7 @@ const HeroSection = ({ heroImage }) => {
       <div className="hero-content">
         <h4 className="hero-subtitle">WELCOME TO BMARKETO SHOP</h4>
         <h1 className="hero-title">
-        It pays to be the first with the<span>BMARKETO SHOP!</span>
+        It pays to be the first with the <span>BMARKETO SHOP!</span>
         </h1>
         <Link to="/products" className="btn btn-shop">SHOP NOW</Link>
       </div>

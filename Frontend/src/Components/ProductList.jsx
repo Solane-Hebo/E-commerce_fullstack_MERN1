@@ -1,29 +1,31 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { useCart } from './CartContext'
 import axios from "../api/axios"
-import { useCart } from './CartContext';
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const { addToCart } = useCart();
+  const [products, setProducts] = useState([])
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(6)
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const searchTerm = searchParams.get("search");
+  const [selectedCategory, setSelectedCategory] = useState("")
+  const { addToCart } = useCart()
+
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const searchTerm = searchParams.get("search")
 
   useEffect(() => {
     const getProducts = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const res = await axios.get('/api/products');
-        setProducts(res.data);
+        const res = await axios.get('/api/products')
+        setProducts(res.data)
       } catch (error) {
-        setError(error.response?.data?.message || 'Something went wrong while fetching the products.');
+        setError(error.response?.data?.message || 'Something went wrong while fetching the products.')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     };
 
@@ -34,7 +36,7 @@ const ProductList = () => {
     return products.filter(product =>
       searchTerm ? product.name.toLowerCase().includes(searchTerm.toLowerCase()) : true
     );
-  }, [searchTerm, products]);
+  }, [searchTerm, products])
 
   const categoryFilteredProducts = useMemo(() => {
     return selectedCategory
@@ -49,6 +51,8 @@ const ProductList = () => {
   const handleAddToCart = (product) => {
     addToCart(product); 
   };
+
+  const handleLoadMore = () => setVisibleCount((prev) => prev + 6)
 
   return (
     <div className="container mt-4">
@@ -96,11 +100,19 @@ const ProductList = () => {
                   </div>
                 </Link>
               </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-muted">No products found.</p>
-        )}
+            </div> 
+        ))
+      ) : (
+        <p className="text-center text-muted">No products found.</p>
+      )}
+      {visibleCount < categoryFilteredProducts.length && (
+        <div className="text-center mt-4">
+          <button onClick={handleLoadMore} className="btn btn-primary">
+            Load More
+          </button>
+        </div>
+      )}
+      
       </div>
 
       {/* Back to Home Button */}

@@ -30,17 +30,12 @@
   }
   
   .form-input:focus {
-    border-color: #036803;
+    border-color: #04408a;
     outline: none;
   }
   
-  .input-error {
-    border-color: #0e942f;
-    background-color: #fee;
-  }
-  
   .subscribe-btn {
-    background:  #0b3e17;
+    background: var(--primary-color);
     color: #fff;
     border: none;
     padding: 12px 20px;
@@ -48,11 +43,10 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    /* margin-top: 10px; */
   }
   
   .subscribe-btn:hover {
-    background: #0e942f;
+    background: var(--button-hover);
   }
   
   
@@ -73,11 +67,6 @@
     border: 1px solid #c3e6cb;
   }
   
-  .error {
-    color: #0e942f;
-    background-color: #d7f8d9;
-    border: 1px solid #cbf5c6;
-  }
   
   @media (max-width: 600px) {
     .subscription-form {
@@ -100,7 +89,7 @@
   .shopping-cart-scroll {
     overflow-y: auto;
     flex-grow: 1;
-    padding-right: 8px; /* For scrollbar space */
-    max-height: 60vh; /* Adjust to your layout */
+    padding-right: 15px; /* For scrollbar space */
+    max-height: 60vh; /* Adjust layout */
   }
   

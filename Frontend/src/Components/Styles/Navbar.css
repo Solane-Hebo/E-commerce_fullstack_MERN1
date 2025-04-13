@@ -8,23 +8,23 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
   position: sticky !important;
   top: 0 !important;
-  background-color: #212529 !important; 
+  background-color: #171c21 !important; 
   z-index: 1050 !important;
   padding: 12px 20px !important; /* More balanced padding */
 }
 
 /* Navbar Brand (Logo) */
 .navbar-brand img {
-  max-height: 35px !important;
+  max-height: 70px ;
   background-color: #ffffff !important;
-  padding: 6px !important;
+  padding: 5px !important;
   border-radius: 6px !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5) !important;
 }
 
 /* Navbar Links */
 .navbar .nav-link {
-  color: #03f840 !important;
+  color: var(--primary-color)!important;
   transition: all 0.3s ease-in-out !important;
   font-size: 1rem !important;
   padding: 10px 15px !important;
@@ -33,7 +33,7 @@ body {
 .navbar .nav-link.active,
 .navbar .nav-link:hover {
   font-weight: bold !important;
-  color: #03f840 !important;
+  color: #f4a51c !important;
 }
 
 /* Button Styling */
@@ -64,15 +64,15 @@ body {
 }
 
 .search-icon:hover {
-  color: #03f840 !important;
+  color: #037dff !important;
 }
 
-/* 🛒 Cart Icon Styling */
+/*Cart Icon Styling */
 .cart-container {
   position: relative !important;
   padding: 10px !important;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, #03f840, #0e942f) !important;
+  /* background: linear-gradient(135deg, #03f840, #0e942f) !important; */
   color: white !important;
   transition: all 0.3s ease-in-out !important;
   display: inline-flex !important;
@@ -83,7 +83,7 @@ body {
 }
 
 .cart-container:hover {
-  background: linear-gradient(135deg, #03f840,  #0e942f) !important;
+  background: linear-gradient(135deg, #037dff, #043870) !important;
   transform: scale(1.1) !important;
 }
 
@@ -98,7 +98,7 @@ body {
   top: -5px !important;
   right: -5px !important;
   background: white !important;
-  color: #03f840 !important;
+  color: #037dff !important;
   font-weight: bold !important;
 }
 
@@ -130,7 +130,7 @@ body {
 
 /* Search Form Button */
 .search-form button {
-  background-color:#045d1b !important;
+  background-color:#043870 !important;
   color: white !important;
   border: none !important;
   padding: 6px 15px !important;
@@ -139,7 +139,7 @@ body {
 }
 
 .search-form button:hover {
-  background-color:#024012 !important;
+  background-color:#043870 !important;
 }
 
 /* Account Dropdown */
@@ -159,7 +159,7 @@ body {
   }
 
   .navbar-brand img {
-    max-height: 28px !important;
+    max-height: 40px !important;
   }
 
   .navbar-toggler-icon {

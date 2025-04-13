@@ -19,17 +19,16 @@ const ProductCard = ({ product }) => {
         </div>
         <div className="card-body text-center">
           <h5 className="card-title mb-2 fw-bold">{product.name || "No Name Available"}</h5>
-          <p className="card-text text-muted mb-2">
+          <p className="card-text text-primary fw-bold mb-2">
             {product.price ? `${product.price} :- SEK` : "Price Unavailable"}
           </p>
         </div>
       </Link>
-      <div className="card-footer bg-white border-0 p-3">
     <button className="btn btn-primary w-100" onClick={() => addToCart(product)}>
       Add To Cart
     </button>
   </div>
-    </div>
+  
   );
 };
 

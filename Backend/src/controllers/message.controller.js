@@ -14,12 +14,12 @@ export const createMessage = asyncHandler (async (req, res, next)=> {
     
 
     if (!mongoose.Types.ObjectId.isValid(threadId)) {
-        return res.status(400).json({ message: 'Invalid thread ID' });
+        return res.status(400).json({ message: 'Invalid thread ID' })
     }
 
     const thread = await Thread.findById(threadId).exec()
     if (!thread) {
-    return res.status(404).json({ message: 'Thread not found' });
+    return res.status(404).json({ message: 'Thread not found' })
     }
     
     const message = await Message.create({content, name, email, thread: threadId, user})
@@ -28,7 +28,7 @@ export const createMessage = asyncHandler (async (req, res, next)=> {
     thread.messages.push(message._id)
     await thread.save()
 
-    res.status(200).json({ message: "Message sent successfully" });
+    res.status(201).json({ message: "Message sent successfully" });
 
 })
 
@@ -36,7 +36,7 @@ export const createGeneralMessage = asyncHandler(async (req, res) => {
     const { name, email, message } = req.body;
 
     if (!name || !email || !message) {
-        return res.status(400).json({ message: 'name, email and message are required' });
+        return res.status(400).json({ message: 'name, email and message are required' })
     }
 
     const newMessage = await Message.create({
@@ -45,7 +45,13 @@ export const createGeneralMessage = asyncHandler(async (req, res) => {
         content: message,
     });
 
-    res.status(201).json({ message: "Message sent successfully", data: newMessage });
+    res.status(200).json({ message: "Message sent successfully",
+        data: {
+            name: newMessage.name,
+            email: newMessage.email,
+            content: newMessage.content,
+        }
+    });
 });
 
 

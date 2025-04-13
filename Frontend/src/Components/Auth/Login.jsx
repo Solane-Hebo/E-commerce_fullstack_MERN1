@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { RiLoaderFill } from 'react-icons/ri'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../AuthContext'
 import { useCart } from '../CartContext'
-import { RiLoaderFill } from 'react-icons/ri'
-import { useDispatch } from 'react-redux'
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' })
@@ -17,11 +17,11 @@ const LoginPage = () => {
   const dispatch = useDispatch()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!formData.email || !formData.password) {
       setError('Please fill in all fields')
-      return;
+      return
     }
 
     setLoading(true)

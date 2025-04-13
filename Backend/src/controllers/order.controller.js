@@ -53,6 +53,17 @@ export const createOrder = asyncHandler(async (req, res) => {
 
 
 export const getUserOrders = asyncHandler(async (req, res) => {
+  const order = await Order.find({ author: req.user._id })
+  .populate({
+    path: "products.product",
+    select: "name price images -_id"
+  })
+  .populate("author", "firstName lastName -_id")
+
+  res.status(200).json(order)
+})
+
+export const getOrdersById = asyncHandler(async (req, res) => {
   const orders = await Order.find({ author: req.user._id })
   .populate({
     path: "products.product",
@@ -88,7 +99,7 @@ export const updateOrderStatus = asyncHandler(async(req, res) =>{
 }
 
 
-  if (!["admin", "moderator"].includes(req.user.role)) {
+  if (!["admin", "moderator", "customer"].includes(req.user.role)) {
     return res.status(403).json({ message: "Not authorized to update order status" })
   }  
 

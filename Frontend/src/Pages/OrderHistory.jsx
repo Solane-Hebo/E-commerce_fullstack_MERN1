@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import '@/Components/Styles/Home.css';
-import axios from "../api/axios";
-import { useAuth } from '../Components/AuthContext';
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '../Components/AuthContext'
+import axios from "../api/axios"
+import '@/Components/Styles/Home.css'
 
 const OrderHistory = () => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { token } = useAuth();
+  const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { token } = useAuth()
 
   useEffect(() => {
-    getOrders();
+    getOrders()
   }, []);
 
   const getOrders = async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
     try {
       const res = await axios.get('/api/order', {
         headers: {
@@ -38,7 +38,7 @@ const OrderHistory = () => {
     try {
       const res = await axios.post('/api/order', {
         products: [
-          { product: 'yourValidProductIdHere', quantity: 1 }
+          { product: 'Valid ProductId', quantity: 1 }
         ]
       }, {
         headers: {
@@ -49,7 +49,7 @@ const OrderHistory = () => {
         getOrders(); // Refresh after creating
       }
     } catch (err) {
-      setError("Failed to create test order");
+      setError("Failed to create order");
     }
   };
 

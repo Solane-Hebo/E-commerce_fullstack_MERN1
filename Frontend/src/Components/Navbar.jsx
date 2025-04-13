@@ -1,57 +1,76 @@
-import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch  } from 'react-redux';
-import logo from '../asserts/Images/Logo.svg';
-import Dropdown from './Dropdown';
-import { useAuth } from './AuthContext';
-import { logout as logoutRedux } from '../Store/userSlice';
-import './Styles/Navbar.css';
-import { useCart } from './CartContext';
+import React, { useEffect, useRef, useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch  } from 'react-redux'
+import { logout as logoutRedux } from '../Store/userSlice'
+import { useAuth } from './AuthContext'
+import { useCart } from './CartContext'
+import logo from '../asserts/Images/Logo.png'
+import Dropdown from './Dropdown'
+import './Styles/Navbar.css'
 
 
 const Navbar = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showSearch, setShowSearch] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { logout, user } = useAuth();
-  const { clearCart } = useCart();
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showSearch, setShowSearch] = useState(false)
 
-  
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
+  const searchRef = useRef(null)
+
+  const { logout, user } = useAuth()
+  const { clearCart } = useCart()
 
   
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/products?search=${searchTerm}`);
+      navigate(`/products?search=${searchTerm}`)
       setShowSearch(false);
+      setSearchTerm('')
     }
   };
 
   const handleLogout = () => {
-    logout();
+    logout()
     clearCart()
     dispatch(logoutRedux())
-    navigate('/');
+    navigate('/')
   };
   
 
   const handleNavClick = () => {
-    const navbarCollapse = document.getElementById('navbarNav');
+    const navbarCollapse = document.getElementById('navbarNav')
     if (navbarCollapse.classList.contains('show')) {
       const bsCollapse = new window.bootstrap.Collapse(navbarCollapse, {
         toggle: true
       });
-      bsCollapse.hide();
+      bsCollapse.hide()
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearch(false)
+      }
+    }
+
+    if (showSearch) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    };
+  }, [showSearch])
+
   
   
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-      <Link to="/" className="navbar-brand">
-        <img src={logo} alt="Shop Logo" style={{ height: '40px' }} />
+      <Link to="/" onClick={handleNavClick} className="navbar-brand">
+        <img src={logo} alt="Shop Logo" />
       </Link>
 
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -83,7 +102,7 @@ const Navbar = () => {
             <button className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               <i className="fa-solid fa-user me-2"></i> Account
             </button>
-            <ul className="dropdown-menu dropdown-menu-end"><>
+            <ul className="dropdown-menu dropdown-menu-end">
           <li><NavLink to="/register" onClick={handleNavClick} className="dropdown-item">Register</NavLink></li>
              {
                user === null
@@ -93,7 +112,7 @@ const Navbar = () => {
           <li><NavLink to="/profile" onClick={handleNavClick} className="dropdown-item">Profile</NavLink></li>
           <li><NavLink to="/order-history" onClick={handleNavClick} className="dropdown-item">Order History</NavLink></li>
           <li><hr className="dropdown-divider" /></li>
-          <li><NavLink to="/" onClick={handleNavClick}><button onClick={handleLogout} className="dropdown-item text-danger">Logout</button></NavLink></li>
+          <li><button  onClick={() => { handleLogout(); handleNavClick(); }}className="dropdown-item text-danger">Logout</button></li>
 
          {
           user.role === 'admin' &&  <li><NavLink to="/admin" className={({ isActive }) => `dropdown-item${isActive ? ' active' : ''}`}>Admin </NavLink></li>
@@ -101,16 +120,17 @@ const Navbar = () => {
          </>
          )
       }  
-       </>
+       
       </ul>
          </li>
+   </ul>
      {/* Search Toggle */}
-        <li className="nav-item">
+     <div ref={searchRef} className="nav-item d-flex align-items-center position-relative">
+        <li className="nav-item" >
             <button className="btn btn-link search-icon" onClick={() => setShowSearch(!showSearch)} aria-label="Search">
             <i className="fa-solid fa-magnifying-glass"></i>
             </button>
         </li>
-   </ul>
 
         {/* Search Form */}
         {showSearch && (
@@ -123,9 +143,10 @@ const Navbar = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               aria-label="Search input"
             />
-            <button className="btn btn-outline-light" type="submit">Search</button>
+            <button onClick={handleNavClick} className="btn btn-outline-light" type="submit">Search</button>
           </form>
         )}
+        </div>
       </div>
     </nav>
   );

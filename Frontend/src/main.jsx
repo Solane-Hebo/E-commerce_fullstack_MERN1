@@ -1,19 +1,21 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Providers from './Components/Providers'; 
-import Layout from './Components/Layout';
-import Home from './Pages/Home';
-import ProductList from './Components/ProductList';
-import ProductDetails from './Components/ProductDetails';
-import CartItem from './Components/CartItem';
-import ProtectedRoute from './Components/Auth/ProtectedRoute';
-import Checkout from './Components/Checkout';
-import OrderHistory from './Pages/OrderHistory';
-import Login from './Components/Auth/Login';
-import Register from './Components/Auth/Register';
-import ContactForm from './Components/ContactForm';
-import ProfilePage from './Pages/ProfilePage';
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
+import Layout from './Components/Layout'
+import Login from './Components/Auth/Login'
+import CartItem from './Components/CartItem'
+import Checkout from './Components/Checkout'
+import Providers from './Components/Providers'
+import Register from './Components/Auth/Register'
+import ContactForm from './Components/ContactForm'
+import ProductList from './Components/ProductList'
+import ProductDetails from './Components/ProductDetails'
+import ProtectedRoute from './Components/Auth/ProtectedRoute'
+
+import Home from './Pages/Home'
+import OrderHistory from './Pages/OrderHistory'
+import ProfilePage from './Pages/ProfilePage'
 
 export const router = createBrowserRouter([
   {
@@ -42,7 +44,7 @@ export const router = createBrowserRouter([
       { path: "*", element: <h2>Page Not Found</h2> },
     ],
   },
-]);
+])
 
 
 createRoot(document.getElementById('root')).render(
