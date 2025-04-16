@@ -1,5 +1,5 @@
 # E-commerce fullstack MERN
-Detta är ett fullstack e-handelsprojekt byggt med **MongoDB, Express, React och Node.js (MERN)**. Projektet är utvecklat som en del av ett utbildningsmoment och innehåller funktionalitet för produktvisning, varukorg, autentisering, orderhistorik och mycket mer.
+Detta är ett fullstack e-handelsprojekt byggt med **MongoDB, Express, React och Node.js (MERN)**. Projektet är utvecklat som en del av ett utbildningsmoment och innehåller funktionalitet för produktvisning, varukorg, autentisering, orderhistorik och mycket mer.  Frontend delan baserad på mitt på mitt tidigare projekt: [Frontend_E-Commerce] (https://github.com/Solane-Hebo/Frontend_E-commerce-React-.git).
 
 ## Funktioner
 
