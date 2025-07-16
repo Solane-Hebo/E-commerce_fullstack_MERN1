@@ -1,0 +1,13 @@
+{
+  "name": "fullstack_e-commerce_mern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm i --prefix Frontend && npm i --prefix Backend && npm run build --prefix Frontend",
+    "start": "npm start --prefix Backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

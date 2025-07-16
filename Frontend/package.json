@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
+    "fullstack_e-commerce_mern": "file:..",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
