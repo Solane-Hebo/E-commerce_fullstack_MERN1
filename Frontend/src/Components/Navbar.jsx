@@ -4,7 +4,7 @@ import { useSelector, useDispatch  } from 'react-redux'
 import { logout as logoutRedux } from '../Store/userSlice'
 import { useAuth } from './AuthContext'
 import { useCart } from './CartContext'
-import logo from '../asserts/Images/Logo.png'
+import logo from '../assets/Images/logo.png'
 import Dropdown from './Dropdown'
 import './Styles/Navbar.css'
 
